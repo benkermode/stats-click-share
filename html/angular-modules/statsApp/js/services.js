@@ -71,134 +71,6 @@ angular.module ( 'statsApp.services', [])
     }
   }])
 
-/*
-  SHARE RATE
-  includes actual shares and actual pageviews: but pageviews are already listed toplevel for each article
-  assume this figure only comes from shares from statplace.net
-  • show share rate compared to average (2 bars)
-  • show pageviews compared to average (2 bars)
-
-  CLICK RATE
-  Rate at which people click on full story from Facebook
-  Assume each story with this stat has equal exposure
-  Could be broken down by Facebook accounts
-  • facebook and twitter main bars ( 2 bars )
-  • facebook breakdown, twitter breakdown ( 2 bars x 2 )
-
-  PAGEVIEWS
-  Views on website
-  Could be broken down by referrer
-
-*/
-
-  .service ( 'GraphDataTemplate', [ function () {
-    return {
-      "share_rate":  {
-        "avg_share_rate" : {
-          "label": "Average Share Rate",
-          "color": '#ff974d',
-          "value": false,
-          "is_percentage" : true,
-          "use_scope_var" : "avg_share_rate" 
-        },
-        "share_rate" : {
-          "label": "This Article Share Rate",
-          "color": false,
-          "value": false,
-          "is_percentage" : true,
-          "use_scope_var" : "article.share_rate",
-          "bar_height_ratio" : 2,
-        },
-        "max" : {
-          "label": "Max Ever Share Rate",
-          "color": '#33cc33',
-          "value": false,
-          "is_percentage" : true,
-          "use_scope_var" : "max_ever_share_rate" 
-        },
-      },
-      "click_rate" : {
-        "avg_click_rate" : {
-          "label": "Average  Click Rate",
-          "color": '#ff974d',
-          "value": false,
-          "is_percentage" : true,
-          "use_scope_var" : "avg_click_rate" 
-        },
-        "max" : {
-          "is_percentage" : true,
-          "label": "Max Ever Click Rate",
-          "color": '#33cc33',
-          "value": false,
-          "use_scope_var" : "max_ever_click_rate" 
-        },
-        "click_rate" : {
-          "label": "This Article Click Rate",
-          "color": '#3b5998',
-          "value": false,
-          "is_percentage" : true,
-          "use_scope_var" : "article.click_rate",
-          "bar_height_ratio" : 2,
-        },
-        "click_rate_children" : {
-          "use_children_object" : "article.click_rate_children",
-        }
-
-      },
-      "pageviews" : {
-        "avg_pageviews" : {
-          "is_percentage" : false,
-          "label": "Average  Pageviews",
-          "color": '#ff974d',
-          "value": false,
-          "use_scope_var" : "avg_pageviews" 
-        },
-        "pageviews" : {
-          "is_percentage" : false,
-          "label": "This Article Pageviews",
-          "color": false,
-          "value": false,
-          "use_scope_var" : "article.Pageviews",
-          "bar_height_ratio" : 2,
-        },
-        "max" : {
-          "is_percentage" : false,
-          "label": "Max Ever Pageviews",
-          "color": '#33cc33',
-          "value": false,
-          "use_scope_var" : "max_ever_pageviews" 
-        },
-      }
-    }
-  }])
-
-
-  .service ( 'GraphSettings', function () {
-    return {
-      "desktop" : { 
-        "height": 20, 
-        "graphTopMargin" : 0, 
-        "barBottomMargin" : 5, 
-        "textY" : "insideBar", //insdieBar, aboveBar
-        "textX" : "rightAlign", //rightAlign, leftAlign
-        "fontSize" : 12 
-      },
-      "mobile" : { 
-        "height": 20, 
-        "graphTopMargin" : 0, 
-        "barBottomMargin" : 25, 
-        "textY" : "aboveBar", 
-        "textX" : "leftAlign", 
-        "fontSize" : 11  
-      },
-      "textFillOutside" : "#333", 
-      "textFillInside" : "#fff",
-      "assumeTextWidth" : 175,
-      "textPadding": 10
-
-    }
-  })
-
   .factory ( 'GraphBuilder', [ 'ScreenVars', 'GraphSettings', '$filter','$timeout',  function ( ScreenVars, GraphSettings, $filter, $timeout ) {
     return {
       buildOneGraph: function ( index, which, article ) {
@@ -295,6 +167,67 @@ angular.module ( 'statsApp.services', [])
       }
     }
 
-  }]);
+  }])
+
+.factory ( 'DataBuilder', [ 'GraphDataTemplate', function ( GraphDataTemplate ) {
+  return {
+    buildArticles: function ( scope ) {
+      //manually clean the global numbers: we know every prop is a number
+
+      //**SET THE GRAPH DATA**/
+      angular.forEach ( scope.articles, function ( v, k ) {
+        //v is 1 article : each article needs a copy of GraphDataTemplate
+        v.graphData = angular.copy ( GraphDataTemplate );
+        angular.forEach ( v.graphData, function ( v1, k1 ) {
+          //v1 is each grouping of bar graphs, groups include: share_rate, click_rate, pageviews
+          angular.forEach ( v1, function ( v2, k2 ) {
+            //v2: JS object referring to ONE BAR AND ITS LABEL: 
+            //if the use_scope_var property has a vlue, get its value and insert it
+            //only one of these can be set on any one object
+            if ( v2.use_scope_var || v2.use_children_object ) {
+              //property_name can only be 'use_scope_var' or 'use_children_object'
+              var property_name = ( v2.use_scope_var ) ? 'use_scope_var':
+                (( v2.use_children_object ) ? 'use_children_object': false);
+              //console.log ( 'property_name: ' + property_name );
+              var valToInsert;
+              if ( v2.use_scope_var ) {
+                //assume it's a global variable previously placed on the scope
+                valToInsert = scope [ v2.use_scope_var ];
+              }
+              //or if the value has "article." in the string, use the individual article scope level                     
+              //v2 [ property_name ] is the property VALUE
+              //eg property_name "use_scope_var", and v2 [ property_name ] = "article.click_rate"
+              if ( v2 [ property_name ].indexOf ( 'article.') > -1 ) {
+                var use_variable_name = v2[ property_name ].split ( 'article.' ) [1];
+                valToInsert = scope.articles [ k ] [ use_variable_name ];
+                //*****ONLY INSERT use_children_object if it exists in the incoming data!!!*****
+                if ( valToInsert && v2.use_children_object ) {
+                  //make a copy of the object, then REMOVE the click_rate_children object from the template
+                  //otherwise the grapher will try and build a bar for the click_rate_children object
+                  var copied_use_children_ojbect = angular.copy ( valToInsert );
+                  //loop over each child and add it to v1: the current grouping of bar graphs
+                  angular.forEach ( valToInsert, function (v3, k3) {
+                    //console.log ( 'child to add: ' + JSON.stringify ( v3 ) );
+                    //append v3, the current child object, to v1: the current group of bars
+                    v1 [ k3 ] = v3; 
+                  } );
+                  //v2 = false;
+                }
+
+              }
+              //now set the value on one Graph BAR object
+              if ( v2.use_scope_var ) {
+                v2.value = valToInsert;
+              }
+            }
+            //if ( k == 0 ) { console.log ( 'v2; ' + JSON.stringify ( v2 ) ); }
+          });
+        });
+      });
+
+
+    }
+  }
+}])
 
 ;

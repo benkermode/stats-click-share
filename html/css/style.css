@@ -210,7 +210,7 @@ a.article-headline:hover {
     opacity: 0;
 }
 .article-extras.revealed {
-    height: 10em;
+    height: 13em;
     opacity: 1;
 }
 .article-extras-close-btn {
@@ -231,7 +231,7 @@ a.article-headline:hover {
     top: 0;
     bottom: 0;
     width: 90%;
-    height: 9em;
+    height: 12em;
 }
 .graph-all-bars-container {
     /* border: 1px solid #ff0000; */
@@ -319,10 +319,10 @@ footer {
         width: 100%;
     }
     .article-extras.revealed {
-        height: 14em;
+        height: 17em;
     }
     .article-svg {
-        height: 13em;
+        height: 16em;
     }
     .pages {
         margin: .5em 0 .5em 0;

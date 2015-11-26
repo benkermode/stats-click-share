@@ -78,15 +78,12 @@ angular.module ( 'statsApp.controllers', [] )
                       valToInsert = $scope.articles [ k ] [ use_variable_name ];
                       //*****ONLY INSERT use_children_object if it exists in the incoming data!!!*****
                       if ( valToInsert && v2.use_children_object ) {
-                        //console.log ( 'valToInsert; ' + valToInsert );
                         //make a copy of the object, then REMOVE the click_rate_children object from the template
                         //otherwise the grapher will try and build a bar for the click_rate_children object
                         var copied_use_children_ojbect = angular.copy ( valToInsert );
-                        console.log ( 'copied_use_children_ojbect ' + k + ': ' + JSON.stringify ( copied_use_children_ojbect ) );
-                        console.log ( 'parent ojbect: v1: ' + JSON.stringify ( v1 ) );
                         //loop over each child and add it to v1: the current grouping of bar graphs
                         angular.forEach ( valToInsert, function (v3, k3) {
-                        console.log ( 'child to add: ' + JSON.stringify ( v3 ) );
+                        //console.log ( 'child to add: ' + JSON.stringify ( v3 ) );
                           //append v3, the current child object, to v1: the current group of bars
                           v1 [ k3 ] = v3; 
                         } );
@@ -210,8 +207,9 @@ angular.module ( 'statsApp.controllers', [] )
                 //***SETTINGS FOR THE BAR***
                 bar.x = 0;
                 //this calculation allows for bars of varying heights
+                var yOffsetForLabel = ( GraphSettings [ device ].textY == "aboveBar" ) ? GraphSettings [ device ].fontSizes : 0; 
                 if ( count == 0 ) {
-                  bar.y = GraphSettings [ device ].graphTopMargin;
+                  bar.y = GraphSettings [ device ].graphTopMargin + yOffsetForLabel;
                 } else {
                   bar.y = previousBarBottom + GraphSettings [ device ].barBottomMargin;
                 }
@@ -232,7 +230,6 @@ angular.module ( 'statsApp.controllers', [] )
                   bar.text.x = bar.x;
                 } else if ( GraphSettings [ device ].textX == 'rightAlign' ) {
                   //bar.width is a raw percentage value
-                  console.log ( 'rightAlign, textFitsInsideBar: ' + textFitsInsideBar );
                   bar.text.x = textFitsInsideBar 
                     ? pixelBarWidth - GraphSettings.assumeTextWidth 
                     : pixelBarWidth + GraphSettings.textPadding;

@@ -175,8 +175,8 @@ angular.module ( 'statsApp.services', [])
         "height": 20, 
         "graphTopMargin" : 0, 
         "barBottomMargin" : 5, 
-        "textY" : "insideBar", //
-        "textX" : "rightAlign", 
+        "textY" : "insideBar", //insdieBar, aboveBar
+        "textX" : "rightAlign", //rightAlign, leftAlign
         "fontSize" : 12 
       },
       "mobile" : { 

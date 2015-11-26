@@ -3,26 +3,14 @@
 angular.module ( 'statsApp.controllers', [] )
 
   .controller ( 'ApplicationController', [ 
-    '$scope', '$interval', 'ScreenVars', 'MediaWatcher', 'GraphDataTemplate', 'DataService', '$filter', 'GlobalData', '$timeout',
+    '$scope', '$interval', 'ScreenVars', 'MediaWatcher', 'GraphDataTemplate','GraphSettings', 'DataService', '$filter', 'GlobalData', '$timeout',
     function ( 
-      $scope, $interval, ScreenVars, MediaWatcher, GraphDataTemplate, DataService, $filter, GlobalData, $timeout ) {
+      $scope, $interval, ScreenVars, MediaWatcher, GraphDataTemplate, GraphSettings, DataService, $filter, GlobalData, $timeout ) {
 
 
       //the following could be set by incoming JSON
       GlobalData.percDecimalPlaces = 0;
       GlobalData.rgbNuetralGray = 25;
-      //textY: above: label goes above var, textY:inside: label goes inside bar or next to it
-      //textX: rightAlign: label goes at the right edge of the bar, textX:leftAlign: left edge of bar
-      GlobalData.graphSettings = {
-        "desktop" : { "height": 20, "graphTopMargin" : 0, "barBottomMargin" : 5, 
-                      "textY" : "insideBar", "textX" : "rightAlign", "fontSize" : 12 },
-        "mobile" : { "height": 20, "graphTopMargin" : 0, "barBottomMargin" : 25, 
-                     "textY" : "aboveBar", "textX" : "leftAlign", "fontSize" : 11  },
-        "textFillOutside" : "#333", 
-        "textFillInside" : "#fff",
-        "assumeTextWidth" : 175,
-        "textPadding": 10
-      }
 
       $scope.$on( 'screenVarsChanged', function(event, data) {
         buildGraphsFromScreenDataChange ( data );
@@ -193,39 +181,39 @@ angular.module ( 'statsApp.controllers', [] )
               bar.x = 0;
               //this calculation allows for bars of varying heights
               if ( count == 0 ) {
-                bar.y = GlobalData.graphSettings [ device ].graphTopMargin;
+                bar.y = GraphSettings [ device ].graphTopMargin;
               } else {
-                bar.y = previousBarBottom + GlobalData.graphSettings [ device ].barBottomMargin;
+                bar.y = previousBarBottom + GraphSettings [ device ].barBottomMargin;
               }
               //setting below will be used by the next iteration above
               var barHeightMagnifyRatio = ( v.bar_height_ratio > 1 ) ? v.bar_height_ratio : 1; 
-              bar.height = GlobalData.graphSettings [ device ].height * barHeightMagnifyRatio;
+              bar.height = GraphSettings [ device ].height * barHeightMagnifyRatio;
               previousBarBottom = bar.y + bar.height;
               bar.width = $filter ( 'barWidthFilter' ) ( bar.value, article.selectedGraphData.max.value );
               bar.color = $filter ( 'barColorFilter' ) ( bar.color, index, which );
               //***SETTINGS FOR THE LABEL***
               bar.text = {};
               //filter only needs percentage width, it will use GlobalData.svgWidth to calculate pixelWidth
-              bar.text.fontSize = GlobalData.graphSettings [ device ].fontSize;
+              bar.text.fontSize = GraphSettings [ device ].fontSize;
 
               var pixelBarWidth = pixelBarWidth = Math.round ( ScreenVars.svgWidth * bar.width / 100 );
-              var textFitsInsideBar = ( pixelBarWidth >  GlobalData.graphSettings.assumeTextWidth ) ? true : false;
-              if ( GlobalData.graphSettings [ device ].textX == 'leftAlign' ) {
+              var textFitsInsideBar = ( pixelBarWidth >  GraphSettings.assumeTextWidth ) ? true : false;
+              if ( GraphSettings [ device ].textX == 'leftAlign' ) {
                 bar.text.x = bar.x;
-              } else if ( GlobalData.graphSettings [ device ].textX == 'rightAlign' ) {
+              } else if ( GraphSettings [ device ].textX == 'rightAlign' ) {
                 //bar.width is a raw percentage value
                 console.log ( 'rightAlign, textFitsInsideBar: ' + textFitsInsideBar );
                 bar.text.x = textFitsInsideBar 
-                  ? pixelBarWidth - GlobalData.graphSettings.assumeTextWidth 
-                  : pixelBarWidth + GlobalData.graphSettings.textPadding;
+                  ? pixelBarWidth - GraphSettings.assumeTextWidth 
+                  : pixelBarWidth + GraphSettings.textPadding;
               } 
-              if (( GlobalData.graphSettings [ device ].textY == "aboveBar" ) || ( !textFitsInsideBar )) {
-                bar.text.fill = GlobalData.graphSettings.textFillOutside;
+              if (( GraphSettings [ device ].textY == "aboveBar" ) || ( !textFitsInsideBar )) {
+                bar.text.fill = GraphSettings.textFillOutside;
               } else {
-                bar.text.fill = GlobalData.graphSettings.textFillInside;
+                bar.text.fill = GraphSettings.textFillInside;
               }
-              //&& GlobalData.graphSettings [ device ].textY == "insideBar"
-              if ( GlobalData.graphSettings [ device ].textY == "insideBar"  ) {
+              //&& GraphSettings [ device ].textY == "insideBar"
+              if ( GraphSettings [ device ].textY == "insideBar"  ) {
                 bar.text.y = bar.y + ((bar.height - bar.text.fontSize) / 2);
               } else {
                 bar.text.y = bar.y - bar.text.fontSize ;

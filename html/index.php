@@ -213,6 +213,7 @@ ScreenVars.graphTopOffset {{ ScreenVars.graphTopOffset }}
     <script src="angular-modules/statsApp/js/directives.js"></script>
     <script src="angular-modules/statsApp/js/filters.js"></script>
     <script src="angular-modules/statsApp/js/services.js"></script>
+    <script src="angular-modules/statsApp/js/json-services.js"></script>
     <?php }  ?>
 
 

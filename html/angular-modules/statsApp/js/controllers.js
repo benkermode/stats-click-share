@@ -143,8 +143,8 @@ angular.module ( 'statsApp.controllers', [] )
         //remember index can be 0, and if it's false we don't need it
         //also check we have both screenSize and svgWidth
         if ( $scope.extrasRevealedIndex > -1 ) {
-          $scope.articles [ $scope.extrasRevealedIndex ].svgWidth = ScreenVars.svgWidth;
-          $scope.articles [ $scope.extrasRevealedIndex ].screenSize = ScreenVars.screenSize;
+//          $scope.articles [ $scope.extrasRevealedIndex ].svgWidth = ScreenVars.svgWidth;
+//          $scope.articles [ $scope.extrasRevealedIndex ].screenSize = ScreenVars.screenSize;
           //buildOneGraph ();
           GraphBuilder.buildOneGraph ( $scope.extrasRevealedIndex, $scope.extrasRevealedCategory, $scope.articles [ $scope.extrasRevealedIndex ]);
           //broadCast emit, the source of this call, strangely happens outside of $digest, so call $apply

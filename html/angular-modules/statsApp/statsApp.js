@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module ( 'statsApp', [ 'statsApp.controllers', 'statsApp.services', 'statsApp.directives', 'statsApp.filters' ])
+angular.module ( 'statsApp', [ 'statsApp.controllers', 'statsApp.services', 'statsApp.jsonServices', 'statsApp.directives', 'statsApp.filters' ])
 
 ;
 

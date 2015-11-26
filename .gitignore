@@ -1,0 +1,4 @@
+#first line comment
+_docs/*
+html/data/*
+node_modules/*

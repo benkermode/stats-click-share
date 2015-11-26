@@ -1,0 +1,28 @@
+{
+  "name": "stats-app",
+  "version": "1.0.0",
+  "description": "A new demo of the Statplace.net click-share page",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/benkermode/stats-click-share.git"
+  },
+  "author": "Ben Kermode",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/benkermode/stats-click-share.git/issues"
+  },
+  "homepage": "http://stats.dualismmedia.com",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-minify-css": "^1.2.1",
+    "gulp-ng-annotate": "^1.1.0",
+    "gulp-strip-debug": "^1.1.0",
+    "gulp-uglify": "^1.5.1",
+    "gulp-watch": "^4.3.5"
+  }
+}

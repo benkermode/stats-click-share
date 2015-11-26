@@ -43,7 +43,7 @@
       </section>
 
       <!--articles-->
-
+ScreenVars.graphTopOffset {{ ScreenVars.graphTopOffset }}
       <section>
 
         <div id="articles-headers">
@@ -168,7 +168,7 @@
               
                 <svg class="article-svg" id="svg-{{$index}}" get-svg-width="{{$index}}">
                 <!--article.selectedGraphData won't exist until the user selects more info-->
-                <g class="graph-allbars-group" ng-attr-transform="translate(0,{{graphTopOffset}})">
+                <g class="graph-allbars-group" ng-attr-transform="translate(0,{{ScreenVars.graphTopOffset}})">
                 <!--article.selectedGraphData won't exist until the user selects more info-->
                 <!--bar width: compare with max value of this group for relative percentage width-->
                 <!--bar width: can use a filter because it's constant: percentage-->

@@ -3,15 +3,14 @@
 angular.module ( 'statsApp.controllers', [] )
 
   .controller ( 'ApplicationController', [ 
-    '$scope', '$interval', 'ScreenVars', 'MediaWatcher', 'GraphDataTemplate','GraphSettings', 'DataService', '$filter', 'GlobalData', '$timeout',
+    '$scope', '$interval', 'GraphBuilder', 'ScreenVars', 'MediaWatcher', 'GraphDataTemplate','GraphSettings', 'DataService', '$filter', 'GlobalData', '$timeout',
     function ( 
-      $scope, $interval, ScreenVars, MediaWatcher, GraphDataTemplate, GraphSettings, DataService, $filter, GlobalData, $timeout ) {
-
+      $scope, $interval, GraphBuilder, ScreenVars, MediaWatcher, GraphDataTemplate, GraphSettings, DataService, $filter, GlobalData, $timeout ) {
 
       //the following could be set by incoming JSON
       GlobalData.percDecimalPlaces = 0;
       GlobalData.rgbNuetralGray = 25;
-
+      $scope.ScreenVars = ScreenVars;
       $scope.$on( 'screenVarsChanged', function(event, data) {
         buildGraphsFromScreenDataChange ( data );
         //console.log ( 'SCOPE.on data: ' + JSON.stringify ( data )  );
@@ -164,103 +163,8 @@ angular.module ( 'statsApp.controllers', [] )
           //point the graph ng-repeater to the selected data set within the article (eg share_rate)
           //the dom nodes won't be built until this happens
           $scope.articles [ index ].selectedGraphData = $scope.articles [ index ].graphData [ which ];
-          buildOneGraph ();
-        }
-      }
-
-      function buildOneGraph () {
-        //build One Graph is responsible for setting the x and y of bars, x, y and text color of the text for one Graph
-        //the bar widths are percentages and they are already set, and don't need to update
-        //this function needs to be called by screenSize changes, changes in SVG width
-
-        //make sure these variables are ready (require at least directive.link for svgWidth)
-        if ( ( ScreenVars.svgWidth != undefined) && (ScreenVars.screenSize != undefined ) ) {
-
-          var index = $scope.extrasRevealedIndex;
-          var which = $scope.extrasRevealedCategory;
-          var article = $scope.articles [ index ];
-          if ( 
-            ( article.lastSvgWidth == ScreenVars.svgWidth ) &&
-              ( article.lastScreenSize == ScreenVars.screenSize ) &&
-              ( article.lastCategory == which ) 
-          ){
-            //do nothing: the graph has been built in the exact current state
-            //this can happen on page load, or clicking between articles
-            console.log ( 'buildOneGraph called, not needed' );
-          } else {
-            //only build if we have the vars ready
-
-            var device = ( ScreenVars.screenSize >= 768 ) ? 'desktop' : 'mobile';
-            console.log ( 'buildOneGraph (' + device + ' )GO: ' + index + ', ' + which );
-            article.lastSvgWidth = ScreenVars.svgWidth;
-            article.lastScreenSize = ScreenVars.screenSize;
-            article.lastCategory == which;
-
-            var count = 0;
-            var previousBarBottom;
-            angular.forEach ( article.selectedGraphData, function(v, k){
-              //console.log ( 'device: ' + device );
-              //v relates to one bar and its associated label
-              //****must at least have a .value property, otherwise don't build a BAR for it
-              if ( v.value != undefined ) {
-                var bar = v; 
-                //***SETTINGS FOR THE BAR***
-                bar.x = 0;
-                //this calculation allows for bars of varying heights
-                var yOffsetForLabel = ( GraphSettings [ device ].textY == "aboveBar" ) ? GraphSettings [ device ].fontSize : 0; 
-                if ( count == 0 ) {
-                  bar.y = GraphSettings [ device ].graphTopMargin + yOffsetForLabel;
-                } else {
-                  bar.y = previousBarBottom + GraphSettings [ device ].barBottomMargin;
-                }
-                //setting below will be used by the next iteration above
-                var barHeightMagnifyRatio = ( v.bar_height_ratio > 0 ) ? v.bar_height_ratio : 1; 
-                bar.height = GraphSettings [ device ].height * barHeightMagnifyRatio;
-                previousBarBottom = bar.y + bar.height;
-                bar.width = $filter ( 'barWidthFilter' ) ( bar.value, article.selectedGraphData.max.value );
-                bar.color = $filter ( 'barColorFilter' ) ( bar.color, index, which );
-                //***SETTINGS FOR THE LABEL***
-                bar.text = {};
-                //filter only needs percentage width, it will use GlobalData.svgWidth to calculate pixelWidth
-                bar.text.fontSize = GraphSettings [ device ].fontSize;
-
-                var pixelBarWidth = pixelBarWidth = Math.round ( ScreenVars.svgWidth * bar.width / 100 );
-                var textFitsInsideBar = ( pixelBarWidth >  GraphSettings.assumeTextWidth ) ? true : false;
-                if ( GraphSettings [ device ].textX == 'leftAlign' ) {
-                  bar.text.x = bar.x;
-                } else if ( GraphSettings [ device ].textX == 'rightAlign' ) {
-                  //bar.width is a raw percentage value
-                  bar.text.x = textFitsInsideBar 
-                    ? pixelBarWidth - GraphSettings.assumeTextWidth 
-                    : pixelBarWidth + GraphSettings.textPadding;
-                } 
-                if (( GraphSettings [ device ].textY == "aboveBar" ) || ( !textFitsInsideBar )) {
-                  bar.text.fill = GraphSettings.textFillOutside;
-                } else {
-                  bar.text.fill = GraphSettings.textFillInside;
-                }
-                //&& GraphSettings [ device ].textY == "insideBar"
-                if ( GraphSettings [ device ].textY == "insideBar"  ) {
-                  bar.text.y = bar.y + ((bar.height - bar.text.fontSize) / 2);
-                } else {
-                  bar.text.y = bar.y - bar.text.fontSize ;
-                }
-
-                //temp
-                //              console.log ( 'textY: ' + GlobalData.graphSettings [ device ].textY );
-                //              console.log ( 'bar.text: ' + JSON.stringify ( bar.text) );
-                count++;
-              }//end if v.value
-            } );
-            //previousBarBottom is now the height of the graph: can use it for vertical centering
-            //this function is only called when an svg is expanded: use $timeout to get the offsetHeight
-            $timeout ( function () {
-              var currentlyExpandedSVG = document.getElementById ( 'svg-' + $scope.extrasRevealedIndex );
-              $scope.graphTopOffset = ( currentlyExpandedSVG.offsetHeight - previousBarBottom ) / 2;
-              // console.log ( 'svg-' + $scope.extrasRevealedIndex + '.height: ' + currentlyExpandedSVG.offsetHeight );
-              // console.log ( '$scope.graphTopOffset: ' + $scope.graphTopOffset );
-            });
-          }
+          //buildOneGraph();
+          GraphBuilder.buildOneGraph ( index, which, $scope.articles [ index ]);
         }
       }
 
@@ -270,7 +174,8 @@ angular.module ( 'statsApp.controllers', [] )
         if ( $scope.extrasRevealedIndex > -1 ) {
           $scope.articles [ $scope.extrasRevealedIndex ].svgWidth = ScreenVars.svgWidth;
           $scope.articles [ $scope.extrasRevealedIndex ].screenSize = ScreenVars.screenSize;
-          buildOneGraph ();
+          //buildOneGraph ();
+          GraphBuilder.buildOneGraph ( $scope.extrasRevealedIndex, $scope.extrasRevealedCategory, $scope.articles [ $scope.extrasRevealedIndex ]);
           //broadCast emit, the source of this call, strangely happens outside of $digest, so call $apply
           $timeout ( function () {
             $scope.$apply();

@@ -111,7 +111,7 @@ angular.module ( 'statsApp.services', [])
         },
         "max" : {
           "label": "Max Ever Share Rate",
-          "color": '#0ec4ac',
+          "color": '#33cc33',
           "value": false,
           "is_percentage" : true,
           "use_scope_var" : "max_ever_share_rate" 
@@ -133,10 +133,14 @@ angular.module ( 'statsApp.services', [])
           "use_scope_var" : "article.click_rate",
           "bar_height_ratio" : 2,
         },
+        "click_rate_children" : {
+          "use_children_object" : "article.click_rate_children",
+        },
+
         "max" : {
           "is_percentage" : true,
           "label": "Max Ever Click Rate",
-          "color": '#0ec4ac',
+          "color": '#33cc33',
           "value": false,
           "use_scope_var" : "max_ever_click_rate" 
         },
@@ -160,7 +164,7 @@ angular.module ( 'statsApp.services', [])
         "max" : {
           "is_percentage" : false,
           "label": "Max Ever Pageviews",
-          "color": '#0ec4ac',
+          "color": '#33cc33',
           "value": false,
           "use_scope_var" : "max_ever_pageviews" 
         },
@@ -175,8 +179,8 @@ angular.module ( 'statsApp.services', [])
         "height": 20, 
         "graphTopMargin" : 0, 
         "barBottomMargin" : 5, 
-        "textY" : "insideBar", //
-        "textX" : "rightAlign", 
+        "textY" : "insideBar", //insdieBar, aboveBar
+        "textX" : "rightAlign", //rightAlign, leftAlign
         "fontSize" : 12 
       },
       "mobile" : { 

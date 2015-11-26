@@ -207,7 +207,7 @@ angular.module ( 'statsApp.controllers', [] )
                 //***SETTINGS FOR THE BAR***
                 bar.x = 0;
                 //this calculation allows for bars of varying heights
-                var yOffsetForLabel = ( GraphSettings [ device ].textY == "aboveBar" ) ? GraphSettings [ device ].fontSizes : 0; 
+                var yOffsetForLabel = ( GraphSettings [ device ].textY == "aboveBar" ) ? GraphSettings [ device ].fontSize : 0; 
                 if ( count == 0 ) {
                   bar.y = GraphSettings [ device ].graphTopMargin + yOffsetForLabel;
                 } else {
@@ -257,8 +257,8 @@ angular.module ( 'statsApp.controllers', [] )
             $timeout ( function () {
               var currentlyExpandedSVG = document.getElementById ( 'svg-' + $scope.extrasRevealedIndex );
               $scope.graphTopOffset = ( currentlyExpandedSVG.offsetHeight - previousBarBottom ) / 2;
-              //console.log ( 'svg-' + $scope.extrasRevealedIndex + '.height: ' + currentlyExpandedSVG.offsetHeight );
-              //console.log ( '$scope.graphTopOffset: ' + $scope.graphTopOffset );
+              // console.log ( 'svg-' + $scope.extrasRevealedIndex + '.height: ' + currentlyExpandedSVG.offsetHeight );
+              // console.log ( '$scope.graphTopOffset: ' + $scope.graphTopOffset );
             });
           }
         }

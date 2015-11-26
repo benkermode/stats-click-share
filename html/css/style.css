@@ -308,6 +308,15 @@ footer {
         height: 5em;
         padding: .75em;
     }
+    .article-show-more {
+        font-size: .3em;
+        border-radius: 2px;
+        border: 1px solid #ccc;
+        padding: .25em 1em .25em 1em;
+    }
+    .core-stat {
+        font-size: 1.75em;
+    }
 }
 @media only screen and (max-width: 767px)  {
     .article-title-group {

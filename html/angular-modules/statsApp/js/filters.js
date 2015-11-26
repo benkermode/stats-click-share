@@ -12,7 +12,7 @@ angular.module ( 'statsApp.filters', [] )
   }])
 
   .filter ( 'numberDisplayer', [   function () { 
-    return function ( num, showPlusSign, is_percentage ){
+    return function ( num, showPlusSign, is_percentage, decimal_places ){
       //put large numbers in readable format with commas
       var formattedNum = '';
       if ( isNaN ( num ) ) {
@@ -22,7 +22,7 @@ angular.module ( 'statsApp.filters', [] )
       } else if ( Math.abs ( num ) > 10000 ) {
         formattedNum = ( num / 1000 ).toFixed ( 1 ) + 'K';
       } else {
-        formattedNum = num;//num.toLocaleString();
+        formattedNum = ( decimal_places>0) ? Number(num).toFixed ( decimal_places ) : num;//num.toLocaleString();
       }
       num = ( showPlusSign && (num > 0 ) ) ? '+' + formattedNum : formattedNum;
       num = ( is_percentage ) ? num + '%' : num;
@@ -42,7 +42,8 @@ angular.module ( 'statsApp.filters', [] )
     return function ( rawValue, maxWidth) {
       //return a percentage width where maxWidth would be 100%  (thus independant of screen width)
       //this filter could be configured differently, the main thing is to use it for all the bars
-      var percWidth = Math.round ( rawValue / maxWidth * 100 );
+//      var percWidth = Math.round ( rawValue / maxWidth * 100 );
+      var percWidth =  ( rawValue / maxWidth * 100 ).toFixed ( 2 );
       percWidth = ( percWidth > 100 ) ? 100 : percWidth;
       //console.log ( 'barWidthFilter: ' + rawValue + ', ' +  maxWidth );
       return percWidth;// + '%';

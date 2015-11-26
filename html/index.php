@@ -174,7 +174,7 @@
                 <!--bar width: can use a filter because it's constant: percentage-->
                 <!--bar color: get the saved relative color for this stat-->
                 <!--text x, y, color, bar x, y: use $scope.buildGraph()-->
-                <g ng-repeat="bar in article.selectedGraphData">
+                <g ng-repeat="bar in article.selectedGraphData" ng-show="bar.value!=undefined">
                   <rect 
                      ng-attr-x="{{bar.x}}"
                      ng-attr-y="{{bar.y}}"
@@ -187,17 +187,10 @@
                      font-size="{{bar.text.fontSize}}"
                      ng-attr-x="{{bar.text.x}}" 
                      ng-attr-fill="{{bar.text.fill}}" 
-                     ng-attr-y="{{bar.text.y}}" >{{bar.label}} - {{ bar.value | numberDisplayer:FALSE:bar.is_percentage }}</text>
+                     ng-attr-y="{{bar.text.y}}" >{{bar.label}} - {{ bar.value | numberDisplayer:FALSE:bar.is_percentage:2 }}</text>
                 </g>
                 </g><!--graph-allbars-group-->
               </svg>
-<!--
-                     ng-attr-x="{{$index | textXfilter:bar.value:article.graphData [ extrasRevealedCategory ].max.value:article.svgWidth:'x'}}" 
-                     ng-attr-fill="{{$index | textXfilter:bar.value:article.graphData [ extrasRevealedCategory ].max.value:article.svgWidth:'fill'}}" 
-                     ng-attr-y="{{$index | barYfilter:'text'}}" 
-                     font-family="sans-serif" >
--->
-
             </div>
 
           </article>

@@ -109,7 +109,7 @@ angular.module ( 'statsApp.controllers', [] )
             //set screenSize and mediaWatch vars
             MediaWatcher.init();
             //TEMP!!//
-            $scope.showMoreArticle(0, 'share_rate');
+            $scope.showMoreArticle(0, 'click_rate');
             //END TEMP!!//
 
           }, function (response) {
@@ -205,7 +205,7 @@ angular.module ( 'statsApp.controllers', [] )
               //console.log ( 'device: ' + device );
               //v relates to one bar and its associated label
               //****must at least have a .value property, otherwise don't build a BAR for it
-              if ( v.value ) {
+              if ( v.value != undefined ) {
                 var bar = v; 
                 //***SETTINGS FOR THE BAR***
                 bar.x = 0;
@@ -216,7 +216,7 @@ angular.module ( 'statsApp.controllers', [] )
                   bar.y = previousBarBottom + GraphSettings [ device ].barBottomMargin;
                 }
                 //setting below will be used by the next iteration above
-                var barHeightMagnifyRatio = ( v.bar_height_ratio > 1 ) ? v.bar_height_ratio : 1; 
+                var barHeightMagnifyRatio = ( v.bar_height_ratio > 0 ) ? v.bar_height_ratio : 1; 
                 bar.height = GraphSettings [ device ].height * barHeightMagnifyRatio;
                 previousBarBottom = bar.y + bar.height;
                 bar.width = $filter ( 'barWidthFilter' ) ( bar.value, article.selectedGraphData.max.value );

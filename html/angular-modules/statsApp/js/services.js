@@ -125,18 +125,6 @@ angular.module ( 'statsApp.services', [])
           "is_percentage" : true,
           "use_scope_var" : "avg_click_rate" 
         },
-        "click_rate" : {
-          "label": "This Article Click Rate",
-          "color": false,
-          "value": false,
-          "is_percentage" : true,
-          "use_scope_var" : "article.click_rate",
-          "bar_height_ratio" : 2,
-        },
-        "click_rate_children" : {
-          "use_children_object" : "article.click_rate_children",
-        },
-
         "max" : {
           "is_percentage" : true,
           "label": "Max Ever Click Rate",
@@ -144,6 +132,18 @@ angular.module ( 'statsApp.services', [])
           "value": false,
           "use_scope_var" : "max_ever_click_rate" 
         },
+        "click_rate" : {
+          "label": "This Article Click Rate",
+          "color": '#3b5998',
+          "value": false,
+          "is_percentage" : true,
+          "use_scope_var" : "article.click_rate",
+          "bar_height_ratio" : 2,
+        },
+        "click_rate_children" : {
+          "use_children_object" : "article.click_rate_children",
+        }
+
       },
       "pageviews" : {
         "avg_pageviews" : {

@@ -118,34 +118,6 @@ angular.module ( 'statsApp.controllers', [] )
       $scope.getPage();
       //    }, 1000 );
 
-      //this function is custom made to pair used with the JSON structure used in the GraphDataTemplate service
-      $scope.buildGraphData = function ( index ) {
-        //each article scope can have its own copy of the GraphDataTemplate: each is only created on a user-requests basis
-        var hasCoreDataAlready = ( $scope.articles [ index ].graphData ) ? true : false;
-        /**SET MAIN STAT VALUES IF NOT SET**/
-        if ( !hasCoreDataAlready ) {
-          $scope.articles [ index ].graphData = angular.copy ( GraphDataTemplate );
-
-          angular.forEach ( $scope.articles [ index ].graphData, function ( v, k ) {
-            //v now refers to each grouping of bar graphs, groups include: share_rate, click_rate, pageviews
-            angular.forEach ( v, function ( v2, k2 ) {
-              //v2 now refers to each object in a group: each OBJECT REFERS TO ONE BAR AND ITS LABEL
-              //if there is a use_scope_var string, get its value and insert it
-              if ( v2.use_scope_var ) {
-                var curValue = $scope [ v2.use_scope_var ];
-                //use the individual article scope level                     
-                if ( v2.use_scope_var.indexOf ( 'article.') > -1 ) {
-                  var use_scope_var = v2.use_scope_var.split ( 'article.' ) [1];
-                  curValue = $scope.articles [ index ][ use_scope_var ];
-                }
-                //now set the value
-                v2.value = curValue;
-              }
-            });
-          });
-        }
-      }
-
       $scope.showMoreArticle = function ( index, which ) {
         //console.log ( 'showmore: ' + index + ', ' + which );
         angular.forEach ( $scope.articles, function ( v, k ) {
@@ -159,8 +131,7 @@ angular.module ( 'statsApp.controllers', [] )
           console.log ( 'set extrasRevealedIndex: ' + $scope.extrasRevealedIndex );
           $scope.extrasRevealedCategory = which;
           $scope.articles [ index ].extrasRevealed = true; 
-          $scope.buildGraphData ( index );
-          //point the graph ng-repeater to the selected data set within the article (eg share_rate)
+                    //point the graph ng-repeater to the selected data set within the article (eg share_rate)
           //the dom nodes won't be built until this happens
           $scope.articles [ index ].selectedGraphData = $scope.articles [ index ].graphData [ which ];
           //buildOneGraph();

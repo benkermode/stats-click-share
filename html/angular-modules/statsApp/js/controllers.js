@@ -83,7 +83,14 @@ angular.module ( 'statsApp.controllers', [] )
                         //otherwise the grapher will try and build a bar for the click_rate_children object
                         var copied_use_children_ojbect = angular.copy ( valToInsert );
                         console.log ( 'copied_use_children_ojbect ' + k + ': ' + JSON.stringify ( copied_use_children_ojbect ) );
-                        v2 = false;
+                        console.log ( 'parent ojbect: v1: ' + JSON.stringify ( v1 ) );
+                        //loop over each child and add it to v1: the current grouping of bar graphs
+                        angular.forEach ( valToInsert, function (v3, k3) {
+                        console.log ( 'child to add: ' + JSON.stringify ( v3 ) );
+                          //append v3, the current child object, to v1: the current group of bars
+                          v1 [ k3 ] = v3; 
+                        } );
+                        //v2 = false;
                       }
 
                     }
@@ -197,7 +204,7 @@ angular.module ( 'statsApp.controllers', [] )
             angular.forEach ( article.selectedGraphData, function(v, k){
               //console.log ( 'device: ' + device );
               //v relates to one bar and its associated label
-              //****must at least have a .value property, otherwise don't build it
+              //****must at least have a .value property, otherwise don't build a BAR for it
               if ( v.value ) {
                 var bar = v; 
                 //***SETTINGS FOR THE BAR***

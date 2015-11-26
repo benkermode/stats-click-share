@@ -22,7 +22,7 @@ angular.module ( 'statsApp.filters', [] )
       } else if ( Math.abs ( num ) > 10000 ) {
         formattedNum = ( num / 1000 ).toFixed ( 1 ) + 'K';
       } else {
-        formattedNum = num.toLocaleString();
+        formattedNum = num;//num.toLocaleString();
       }
       num = ( showPlusSign && (num > 0 ) ) ? '+' + formattedNum : formattedNum;
       num = ( is_percentage ) ? num + '%' : num;

@@ -43,7 +43,7 @@
       </section>
 
       <!--articles-->
-ScreenVars.screenSize {{ ScreenVars.screenSize }}
+      <span ng-show="devMode">ScreenVars.screenSize: <span ng-bind="ScreenVars.screenSize"></span></span>
       <section>
 
         <div id="articles-headers">

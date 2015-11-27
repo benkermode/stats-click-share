@@ -26,6 +26,7 @@ div { box-sizing: border-box; }
 header {
     border: 0px solid #333;
 }
+/*1160px and above*/
 #content {
     width: 1140px;
     margin: auto;
@@ -276,26 +277,27 @@ footer {
     text-align: right;
     padding: 0 1em 0 1em;
 }
-@media only screen and (min-width: 1024px) and (max-width: 1140px)  {
+/*allow minimum 20px horizontal margin*/
+@media only screen and (min-width: 1024px) and (max-width: 1160px)  {
     #content {
-        width: 1024px;
+        width: 1004px;
     }
 }
 @media only screen and (min-width: 768px) and (max-width: 1023px)  {
     #content {
-        width: 768px;
+        width: 748px;
     }
 
 }
 @media only screen and (min-width: 480px) and (max-width: 767px)  {
     #content {
-        width: 480px;
+        width: 460px;
     }
 
 }
 @media only screen and (min-width: 320px) and (max-width: 479px)  {
     #content {
-        width: 320px;
+        width: 310px;
     }
 
 }

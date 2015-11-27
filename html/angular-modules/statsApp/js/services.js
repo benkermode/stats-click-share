@@ -29,16 +29,19 @@ angular.module ( 'statsApp.services', [])
       init: function () {
 
         //these obviously match rules in external CSS, and are most effective when they do: Not perfectly DRY, but still nifty
-        var Watch1024 = $window.matchMedia ( '(min-width: 1024px)' );
-        var Watch768 = $window.matchMedia ('(min-width: 768px) and (max-width: 1023px)' );
-        var Watch480 = $window.matchMedia ('(min-width: 480px) and (max-width: 767px)');
-        var Watch320 = $window.matchMedia ('(min-width: 320px) and (max-width: 479px)');
+        var Watch1161 = $window.matchMedia ( '(min-width: 1161px)' );
+        var Watch1024 = $window.matchMedia ( '(min-width: 1024px) and (max-width: 1160px)' );
+        var Watch768 = $window.matchMedia ( '(min-width: 768px) and (max-width: 1023px)' );
+        var Watch480 = $window.matchMedia ( '(min-width: 480px) and (max-width: 767px)'  );
+        var Watch320 = $window.matchMedia ( '(min-width: 320px) and (max-width: 479px)' );
 
         //this handler will get called by any of the Watchers above, so we have to check which one
         var handleMediaChange = function ( mediaQueryList ) {
           if ( mediaQueryList.matches ) {
             //set ScreenSize to numbers for use of comparison operators
-            if ( mediaQueryList.media.indexOf ( '1024px' ) > -1 ) {
+            if ( mediaQueryList.media.indexOf ( '1161px' ) > -1 ) {
+              ScreenVars.screenSize = 1161;
+            } else if ( mediaQueryList.media.indexOf ( '1024px' ) > -1 ) {
               ScreenVars.screenSize = 1024;
             } else if ( mediaQueryList.media.indexOf ( '768px' ) > -1 ) {
               ScreenVars.screenSize = 768;
@@ -47,9 +50,9 @@ angular.module ( 'statsApp.services', [])
             } else if ( mediaQueryList.media.indexOf ( '320px' ) > -1 ) {
               ScreenVars.screenSize = 320;
             } 
+              console.log ( "ScreenVars.screenSize: " + ScreenVars.screenSize);
             if ( ScreenVars.svgElement ) {
               ScreenVars.svgWidth = ScreenVars.svgElement.offsetWidth;
-              console.log ( "ScreenVars.svgHeight: " + ScreenVars.svgHeight);
               ScreenVars.svgHeight = ScreenVars.svgElement.offsetHeight;
 
             }
@@ -58,10 +61,12 @@ angular.module ( 'statsApp.services', [])
           }
         }
 
+        Watch1161.addListener( handleMediaChange );
         Watch1024.addListener( handleMediaChange );
         Watch768.addListener( handleMediaChange );
         Watch480.addListener( handleMediaChange );
         Watch320.addListener( handleMediaChange );
+        handleMediaChange ( Watch1161 );
         handleMediaChange ( Watch1024 );
         handleMediaChange ( Watch768 );
         handleMediaChange ( Watch480 );

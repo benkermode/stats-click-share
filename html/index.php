@@ -43,7 +43,7 @@
       </section>
 
       <!--articles-->
-ScreenVars.graphTopOffset {{ ScreenVars.graphTopOffset }}
+ScreenVars.screenSize {{ ScreenVars.screenSize }}
       <section>
 
         <div id="articles-headers">

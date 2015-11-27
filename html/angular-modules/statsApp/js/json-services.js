@@ -117,7 +117,7 @@ angular.module ( 'statsApp.jsonServices', [])
       "mobile" : { 
         "height": 20, 
         "graphTopMargin" : 0, 
-        "barBottomMargin" : 25, 
+        "barBottomMargin" : 18, 
         "textY" : "aboveBar", 
         "textX" : "leftAlign", 
         "fontSize" : 11  

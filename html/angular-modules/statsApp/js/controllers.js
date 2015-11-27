@@ -56,9 +56,7 @@ angular.module ( 'statsApp.controllers', [] )
             //set screenSize and mediaWatch vars
             MediaWatcher.init();
 
-            //TEMP!!//
-            $scope.showMoreArticle(0, 'click_rate');
-            //END TEMP!!//
+            //$scope.showMoreArticle(0, 'click_rate');
 
           }, function (response) {
             $scope.dataError = true;

@@ -111,7 +111,7 @@ header {
     color: #999;
     font-size: 2em;
     /* border: 1px solid; */
-    width: 1.5em;
+    width: 1.8em;
     display: inline-block;
 }
 .article-title-and-details {
@@ -301,6 +301,11 @@ footer {
     }
 
 }
+@media only screen and (max-width: 1160px)  {
+    .article-title-and-details {
+        width: 75%;
+    }
+}
 
 @media only screen and (max-width: 1023px)  {
     .average-box {
@@ -318,6 +323,9 @@ footer {
     }
     .core-stat {
         font-size: 1.75em;
+    }
+    .article-title-and-details {
+        width: 82%;
     }
 }
 @media only screen and (max-width: 767px)  {
@@ -337,5 +345,8 @@ footer {
     }
     .pages {
         margin: .5em 0 .5em 0;
+    }
+    .article-title-and-details {
+        width: 70%;
     }
 }

@@ -12,4 +12,8 @@ Graphs are displayed and calculated using internal graph templates in [json-serv
 * "use_scope_var" : "avg_click_rate” tells the app to look for the scope variable named "avg_click_rate" and insert it
 * "use_children_object" : "article.click_rate_children”, tells the app to look for an object named click_rate_children in the current item's data, and if it exists, insert all its children in the graph, with one bar graph and its label produced for each of the children. 
 This custom functionality becomes a powerful way to reduce JSON filesize, and behaves somewhat like a mini-framework.
+* the GraphSettings service contains a number of configurable options for graph building at mobile and desktop screensizes.
 
+##Graph Builder
+The GraphBuilder service in [services.js](html/angular-modules/statsApp/js/services.js) builds each graph only when the user requests it.
+The MediaWatcher service notifies the app when media query screen changes fire, and the GraphBuilder builds the graph according to the appropriate GraphSettings discussed above.

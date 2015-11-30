@@ -74,7 +74,7 @@ angular.module ( 'statsApp.controllers', [] )
           v.extrasRevealed = false;
         });
         if ( index == 'close' ) {
-          $scope.extrasRevealedIndex = false;st
+          $scope.extrasRevealedIndex = false;
           $scope.extrasRevealedCategory = false;
         } else {
           $scope.extrasRevealedIndex = index;

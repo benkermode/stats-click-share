@@ -200,7 +200,7 @@
 
       <!--footer-->
       <footer ng-show="articles.length > 0">
-        Page <span ng-bind="global.current_page"></span> of <span ng-bind="global.total_pages"></span>
+
       </footer>
     </div><!--end content-->
 
